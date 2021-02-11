@@ -1,0 +1,557 @@
+import discord
+from discord.ext import commands
+import random
+import asyncio
+import json
+import os
+import math
+
+os.chdir("C:\\Users\\darel\\PycharmProjects\\MyBot")
+
+client = commands.Bot(command_prefix = "/")
+client.remove_command("help")
+
+#---------------------------------------------------------------------------------------------------
+#Events taking place.
+@client.event
+async def on_ready():
+    print("Bot is ready.")
+
+    await client.change_presence(activity = discord.Activity(type = discord.ActivityType.watching, name = "over my Homies"))
+
+async def change_stat():
+    await client.wait_until_ready()
+
+    statuses = ["over my Homies.", "over Everything Hub | /help"]
+    while not client.is_closed():
+        status = random.choice(statuses)
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=status))
+        await asyncio.sleep(10)
+
+
+
+#---------------------------------------------------------------------------------------------------
+#Setting up the Help Command
+@client.group(invoke_without_command = True, aliases = ["h", "Help", "H"])
+async def help(ctx):
+    em = discord.Embed(title = "Help", description = "Use /help <command> for additional info on that particular command.\nThe command must be in lower case!!", colour=discord.Colour.green())
+
+    em.add_field(name = "Moderation", value = "Rules\nMute\nUnmute\nKick\nBan\nUnban\nWarn\nClear")
+    em.add_field(name = "Fun", value = "Greet\n8ball\nImSad\nMyB\nDeodorant\nLastname\nThanks\nInsult\nSavage\nBoost\nPoll")
+    em.add_field(name = "Calculator", value = "Add\nSubtract\nMultiply\nDivide\nPower\nSquareRoot")
+
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Rules"])
+async def rules(ctx):
+    em = discord.Embed(title = "Rules", description = "Posts the rules of this majestic server.\n", colour=discord.Color.green())
+    em.add_field(name = "**Syntax**", value = "/rules or /rules [number]")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Kick"])
+async def kick(ctx):
+    em = discord.Embed(title = "Kick", description = "Kicks a Homie from the our glorious server.\n", colour=discord.Colour.red())
+    em.add_field(name = "**Syntax**", value = "/kick <member> [reason]")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Ban"])
+async def ban(ctx):
+    em = discord.Embed(title = "Ban", description = "Bans a Homie from ever coming back into our glorious server.\n", colour=discord.Colour.red())
+    em.add_field(name = "**Syntax**", value = "/ban <member> [reason]")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Unban"])
+async def unban(ctx):
+    em = discord.Embed(title = "Unban", description = "Unbans a Homie that was once banned from our glorious server.\n", colour=discord.Colour.red())
+    em.add_field(name = "**Syntax**", value = "/unban <member> [reason]")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Warn"])
+async def warn(ctx):
+    em = discord.Embed(title = "Warn", description = "Warns a Homie for roaming too wild.\n", colour=discord.Colour.red())
+    em.add_field(name = "**Syntax**", value = "/warn <member> [reason]")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Mute"])
+async def mute(ctx):
+    em = discord.Embed(title = "Mute", description = "Mutes a Homie for talking too much shit.\n", colour=discord.Colour.red())
+    em.add_field(name = "**Syntax**", value = "/mute <member> [reason]")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Unmute"])
+async def unmute(ctx):
+    em = discord.Embed(title = "Unmute", description = "Unmutes a Homie.\n", colour=discord.Colour.red())
+    em.add_field(name = "**Syntax**", value = "/unmute <member> [reason]")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Clear"])
+async def clear(ctx):
+    em = discord.Embed(title = "Clear", description = "Clears out a desired amount of messages in a channel.\nIf no specific amount is given I will automatically delete the last 5 messages.\n", colour=discord.Colour.red())
+    em.add_field(name = "**Syntax**", value = "/clear <member> [reason]")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["8ball", "8Ball"])
+async def _8ball(ctx):
+    em = discord.Embed(title = "8Ball", description = "Play 8Ball with me!\n", colour=discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/8ball")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Greet"])
+async def greet(ctx):
+    em = discord.Embed(title = "Greet", description = "Allows me to greet a Homie!\n", colour=discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/greet")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["ImSad", "imSad", "Imsad"])
+async def imsad(ctx):
+    em = discord.Embed(title = "I'm Sad", description = "I will cheer you up with a picture and a positive message, Homie!\n", colour=discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/imsad")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["MyB", "myB", "Myb"])
+async def myb(ctx):
+    em = discord.Embed(title = "My Bad", description = "You can excuse yourself with me.\n", colour = discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/myb")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["ln", "Ln", "LN", "lname", "Lname", "lN"])
+async def lastname(ctx):
+    em = discord.Embed(title = "Lastname", description = "I will swap your lastname for a fresher, cleaner one.\n", colour = discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/lastname [lastname] or /lname <lastname>")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Deodorant", "deo", "Deo", "Deod", "deod"])
+async def deodorant(ctx):
+    em = discord.Embed(title = "Deodorant", description = "I will hand a deodorant to whoever you tell me to.\n", colour=discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/deodorant or /deod")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Boost"])
+async def boost(ctx):
+    em = discord.Embed(title = "Boost", description = "I receive a free boost from you!\n", colour=discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/boost")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Thanks", "Thx", "thx", "Thank", "thank"])
+async def thanks(ctx):
+    em = discord.Embed(title = "Thanks", description = "You can thank me for my hard work and dedication!\n", colour=discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/thanks")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Insult"])
+async def insult(ctx):
+    em = discord.Embed(title = "Insult", description = "I will insult another Homie for you.\n", colour = discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/insult <member>")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Savage", "svg", "Svg"])
+async def savage(ctx):
+    em = discord.Embed(title = "Savage", description = "You can praise me for my pure savagery.\n", colour = discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/savage")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Poll", "pl", "Pl", "PL"])
+async def poll(ctx):
+    em = discord.Embed(title = "Poll", description = "I can create a simple poll command for you.\n", colour=discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/poll [option 1] or [option 2]\nYour two options **MUST** be separated by the word **or**")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Add"])
+async def add(ctx):
+    em = discord.Embed(title = "Add", description = "I will add two numbers and give you the answer.\n", colour = discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/add [number] [operator] [number]")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Subtract", "sub", "Sub"])
+async def subtract(ctx):
+    em = discord.Embed(title = "Subtract", description = "I will subtract two numbers and give you the answer.\n", colour = discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/subtract [number] [operator] [number]")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Multiply", "mult", "Mult"])
+async def multiply(ctx):
+    em = discord.Embed(title = "Multiply", description = "I will multiply two numbers and give you the answer.\n", colour = discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/multiply [number] [operator] [number]")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Divide", "div", "Div"])
+async def divide(ctx):
+    em = discord.Embed(title = "Divide", description = "I will divide two numbers and give you the answer.\n", colour = discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/divide [number] [operator] [number]")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Pow", "Power", "pow"])
+async def power(ctx):
+    em = discord.Embed(title = "Power", description = "I will raise a number to whatever power you tell me to and give you the answer.\n", colour = discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/pow [number] [operator(^)] [number]")
+    await ctx.send(embed = em)
+
+@help.command(aliases = ["Sqrt", "SquareRoot", "squareroot"])
+async def sqrt(ctx):
+    em = discord.Embed(title = "SquareRoot", description = "I will look for the square root of any number you tell me to and give you the answer.\n", colour = discord.Colour.blue())
+    em.add_field(name = "**Syntax**", value = "/sqrt [number]")
+    await ctx.send(embed = em)
+
+#---------------------------------------------------------------------------------------------------
+#Command usage
+
+@client.command(aliases = ["Rules"])
+async def rules(ctx, *, number = None):
+
+    rules_list = [":beginner: A Homie's social media/website will be the only advertisements allowed. Anything outside of that, including Discord server invites, will be prohibited.\n",
+                  ":beginner: Discrimination against others based on their age, gender, sexual preferences, race, nationality, among other things is strictly prohibited and will not be tolerated. That being said, a little light trolling regarding the subjects is still allowed just for the lolz.\n",
+                  ":beginner: Religious and/or political content will only be allowed as long as it is used within an educational context. DO NOT enforce your religious and/or political beliefs onto others.\n",
+                  ":beginner: Do not post any **NSFW** content outside the **NSFW** Channel. Mistakes are understandable, but please try to be extra careful when dealing with **NSFW** content.\n",
+                  ":beginner: Mature language is allowed, just try to keep it cool with everyone in the server.\n",
+                  ":beginner: Respect one another.\n"]
+
+    if not number:
+        await ctx.send(":beginner: A Homie's social media/website will be the only advertisements allowed. Anything outside of that, including Discord server invites, will be prohibited.\n"":beginner: Discrimination against others based on their age, gender, sexual preferences, race, nationality, among other things is strictly prohibited and will not be tolerated. That being said, a little light trolling regarding the subjects is still allowed just for the lolz.\n"":beginner: Religious and/or political content will only be allowed as long as it is used within an educational context. DO NOT enforce your religious and/or political beliefs onto others.\n"":beginner: Do not post any **NSFW** content outside the **NSFW** Channel. Mistakes are understandable, but please try to be extra careful when dealing with **NSFW** content.\n"":beginner: Mature language is allowed, just try to keep it cool with everyone in the server.\n"":beginner: Respect one another.\n")
+    else:
+        await ctx.send(rules_list[int(number) - 1])
+
+@client.command(aliases = ["Kick"])
+@commands.has_permissions(kick_members = True)
+async def kick(ctx, member : discord.Member, *, reason = None):
+    if member.dm_channel == None:
+        await member.create_dm()
+    await member.dm_channel.send(
+        content=f"You have been kicked from {ctx.guild} by {ctx.message.author}\nReason: {reason} ")
+    await member.kick(reason = reason)
+    await ctx.send(f"Kicked the not-so-Homie {member.mention}")
+
+@client.command(aliases = ["Ban"])
+@commands.has_permissions(ban_members = True)
+async def ban(ctx, member : discord.Member, *, reason = None):
+    if member.dm_channel == None:
+        await member.create_dm()
+    await member.dm_channel.send(
+        content=f"You have been banned from {ctx.guild} by {ctx.message.author}\nReason: {reason} ")
+    await member.ban(reason = reason)
+    await ctx.send(f"Banned the not-so-Homie {member.mention}")
+
+@client.command(aliases = ["Unban"])
+@commands.has_permissions(ban_members = True)
+async def unban(ctx, *, member):
+    banned_users = await ctx.guild.bans()
+    member_name, member_discriminator = member.split("#")
+
+    for ban_entry in banned_users:
+        user = ban_entry.user
+
+        if (user.name, user.discriminator) == (member_name, member_discriminator):
+            await ctx.guild.unban(user)
+            await ctx.send(f"Unbanned the Homie {user.mention}")
+            return
+
+@client.command(aliases = ["Mute"])
+@commands.has_permissions(kick_members = True)
+async def mute(ctx, member : discord.Member):
+    muted_role = ctx.guild.get_role(549255245709180947)
+    await member.add_roles(muted_role)
+    await ctx.send(f"The Homie {user.mention} has been muted for talking too much shit.")
+
+@client.command(aliases = ["Unmute"])
+@commands.has_permissions(kick_members = True)
+async def unmute(ctx, member : discord.Member):
+    muted_role = ctx.guild.get_role(549255245709180947)
+    await member.remove_roles(muted_role)
+    await ctx.send(f"The Homie {user.mention} has been unmuted.")
+
+@client.command(aliases = ["Warn"])
+@commands.has_permissions(kick_members = True)
+async def warn(ctx, member : discord.Member, *, reason = None):
+    await ctx.send(f"{member.mention} has been warned {reason}.")
+
+@client.command(aliases = ["Clear"])
+@commands.has_permissions(manage_messages = True)
+async def clear(ctx, amount = 6):
+    await ctx.channel.purge(limit = amount)
+
+#---------------------------------------------------------------------------------------------------
+#Fun commands
+
+@client.command(aliases = ["Greet", "meet", "Meet"])
+async def greet(ctx):
+    greeting = [f"Hello there {ctx.author.mention}!",
+                f"Hi {ctx.author.mention}, pleasure meeting you.",
+                f"It is an honor to meet you, {ctx.author.mention}.",
+                f"Happy to see you here, {ctx.author.mention}.",
+                f"Thank you for the warm greeting, I look forward to becoming friends, {ctx.author.mention}.",
+                f"I am so glad I am getting to meet you, {ctx.author.mention}!",
+                f"Hi there, {ctx.author.mention}, hope you are having a fantastic day!",
+                f"Why thank you, {ctx.author.mention}, that is very kind of you.",
+                f"EY! It's the Homie {ctx.author.mention}!",
+                f"YO, {ctx.author.mention}, what's good Homie? Hope you're chilling."]
+    await ctx.send(f"{random.choice(greeting)}")
+
+@client.command(aliases = ["8ball", "eightball", "Eightball", "8Ball", "EightBall"])
+async def _8ball(ctx, *, question):
+    responses = [ "It is certain :8ball:",
+                  "It is decidedly so :8ball:",
+                  "Without a doubt :8ball:",
+                  "Yes, definitely :8ball:",
+                  "You may rely on it :8ball:",
+                  "As I see it, yes :8ball:",
+                  "Most likely :8ball:",
+                  "Outlook good :8ball:",
+                  "Yes :8ball:",
+                  "Signs point to yes :8ball:",
+                  "Reply hazy try again :8ball:",
+                  "Ask again later :8ball:",
+                  "Better not tell you now :8ball:",
+                  "Cannot predict now :8ball:",
+                  "Concentrate and ask again :8ball:",
+                  "Don't count on it :8ball:",
+                  "My reply is no :8ball:",
+                  "My sources say no :8ball:",
+                  "Outlook not so good :8ball:",
+                  "Very doubtful :8ball:"
+    ]
+    await ctx.send(f"Question: {question}\nAnswer: {random.choice(responses)}")
+
+@client.command()
+async def imsad(ctx):
+    imsad_images = ["Images/NotSad.jpg", "Images/NotSad2.jpg", "Images/Puppy.jpg", "Images/Puppy2.jpg", "Images/Puppy3.jpg", "Images/Puppy4.jpg", "Images/Cat.jpg", "Images/Kitten.jpg", "Images/Seal.jpg",
+                    "Images/Wolf.png", "Images/Birb.jpg", "Images/Birbo.jpg", "Images/FoxoDevouringBunno.jpg", "Images/DrinkingKitty.jpg", "Images/Piggy.jpg", "Images/Pikachu.png", "Images/Parrot.jpg", "Images/Hedgy.jpg"]
+
+    homie_messages = [f"Don't be sad, {ctx.author.mention}. You know I'm your Homie, I'm here for you.",
+                      f"Cheer up, {ctx.author.mention}, I'm by your side. :smile:",
+                      f"Things will get better, they will. Remember that {ctx.author.mention}",
+                      f"Life can be hard, but you must never give up. Always keep fighting, {ctx.author.mention}!",
+                      f"Life is full of challenges, but you {ctx.author.mention}, you will persevere.",
+                      f"Your outlook on life will change once you realize the blessings of your surroundings {ctx.author.mention}.",
+                      f"There is no need to be sad, {ctx.author.mention}, you will accomplish all of your dreams and life goals!"]
+
+    random_image = random.choice(imsad_images)
+
+    await ctx.send(f"{random.choice(homie_messages)}")
+    await ctx.send(file=discord.File(random_image))
+
+@client.command(aliases = ["Deo", "deo", "Deodorant", "deod", "Deod"])
+async def deodorant(ctx, member : discord.Member):
+    deodorants = ["Images/Axe Deodorant.jpg", "Images/Tom's Deod.png", "Images/Deodorant1.png"]
+    await ctx.send(f"{ctx.author.mention} gave {member.mention} some much needed deodorant for being a nasty fuck.")
+    await ctx.send(file=discord.File(random.choice(deodorants)))
+
+@client.command(aliases = ["Thank", "Thanks", "thank", "thx", "thanku", "ThankU", "thanks!", "Thanks!", "Thanku", "ThankU!", "thankU!", "thankU"])
+async def thanks(ctx):
+    await ctx.send(f"You're welcomed, {ctx.author.mention}. Always here to help, Homie.")
+    await ctx.send(file=discord.File("Images/CaptainFalcon.gif"))
+
+@client.command(aliases = ["Insult"])
+async def insult(ctx, member : discord.Member):
+    insults = [f"{member.mention} you're like a cloud. When you disappear, it's a beautiful day.",
+               f"{member.mention} pretty sure I looked through my receipts I didn't buy any of your bullshit.",
+               f"I think we're all pretty jealous of all of the people who haven't met {member.mention}.",
+               f"{member.mention} is proof God does have a sense of humor.",
+               f"{ctx.author.mention} there's no need to insult {member.mention}, their face is one all by itself.",
+               f"Damn {member.mention} you must have been born on a highway, cause that's where most accidents happen.",
+               f"{member.mention}'s birth certificate is an apology from the condom factory.",
+               f"Two wrongs don't make a right, {member.mention}. Take your parents for example.",
+               f"{member.mention} if your parents were to divorce, would they still be brother and sister?",
+               f"When I say I'm rolling a fatty, I don't mean a joint, I mean {member.mention}.",
+               f"If {member.mention}'s brain was dynamite, there wouldn’t be enough to blow their hat off.",
+               f"{member.mention} is more disappointing than an unsalted pretzel.",
+               f"I’ll never forget the first time {member.mention} and I met. But I’ll keep trying.",
+               f"Keep rolling your eyes, {member.mention}, you might eventually find a brain.",
+               f"{member.mention} is the human version of period cramps.",
+               f"Don’t worry, {member.mention}, the first 40 years of childhood are always the hardest.",
+               f"{member.mention} might just be why the middle finger was invented in the first place."]
+
+    random_insults = random.choice(insults)
+
+    await ctx.send(random_insults)
+
+@client.command(aliases = ["Savage", "svg", "Svg"])
+async def savage(ctx):
+    svg_list = [f"Thanks {ctx.author.mention}. You know we spittin' fire out here. 😎",
+                f"No need to mention it {ctx.author.mention}, I know I'm straight up flames up in this bitch. 🔥",
+                f"You know it, {ctx.author.mention}! We out here taking lives and fucking wives.",
+                f"Ain't no one here more savage than me, and I'm glad you know it, {ctx.author.mention}",
+                f"{ctx.author.mention}, Homie, you know I'm surrounded by weak people around here.",
+                f"{ctx.author.mention}, you know it, baby. 😎",
+                f"🥱"]
+    random_svg = random.choice(svg_list)
+
+    await ctx.send(f"{random_svg}")
+
+@client.command(aliases = ["Boost"])
+async def boost(ctx):
+    hype_pics = ["Super Saiyan Folder/All Might.gif", "Super Saiyan Folder/All Might Cape.gif", "Super Saiyan Folder/All Might Eyes.gif",
+                 "Super Saiyan Folder/Goku Blue.gif", "Super Saiyan Folder/GokuSaiyan!.gif", "Super Saiyan Folder/GokuSaiyan2.gif",
+                 "Super Saiyan Folder/GokuSaiyan3.gif", "Super Saiyan Folder/GokuSaiyan4.gif", "Super Saiyan Folder/SaiyanFalcon.gif"]
+
+    random_hype_pics = random.choice(hype_pics)
+
+    await ctx.send(f"{ctx.author.mention}, thank you so much for the BOOOOOOOOOOOOST!")
+    await ctx.send(file=discord.File(random_hype_pics))
+
+@client.command(aliases = ["MyB", "myB", "Myb"])
+async def myb(ctx):
+    myb_responses = [f"No worries Homie, it's all good.",
+                     f"We gucci {ctx.author.mention}, just don't do it again, fam.",
+                     f"It's all good {ctx.author.mention}, we're still chill.",
+                     f"Everything's chilling between us, ain't nothing to worry about {ctx.author.mention}.",
+                     f"Just be more careful next time, that is all. We still solid with each other, {ctx.author.mention}."]
+    random_myb = random.choice(myb_responses)
+    await ctx.send(random_myb)
+
+@client.command(aliases = ["ln", "Ln", "LN", "lname", "Lname", "lN"])
+async def lastname(ctx, *, lastname):
+    lastname_list = ["Rainbowcuck", "Universal", "Huntsmith", "Plutonium", "Armesian", "Clooney", "Poopyfarts", "Cheekerclapper", "Reeeeeeee",
+                     "Hiroshima", "Jumpman", "Broostah", "Tallshit", "Dickenzon", "Cocksworthy", "Octopodes", "Vagenta", "Meatswapper",
+                     "McShortygee", "Wimpy", "Automaton", "Jimbo","Cocklover", "Boobamaniac", "Bronie", "Nerdstrong", "Holieshit"]
+
+    random_ll = random.choice(lastname_list)
+
+    await ctx.send(f"Your old name was: {ctx.author.mention} {lastname}")
+
+    lastname = random_ll
+
+    await ctx.send(f"Your new name will be: {ctx.author.mention} {lastname}")
+
+@client.command(aliases = ["pl", "Poll", "Pl"])
+async def poll(ctx, *, msg):
+    channel = ctx.channel
+    try:
+        op1, op2 = msg.split("or")
+        txt = f"React with ✅ for {op1} or ❎ for {op2}"
+    except:
+        await channel.send("Homie, Fam, Brother, the correct syntax is: [Choice1] or [Choice2]")
+        return
+
+    embed = discord.Embed(title = "Poll", description = txt, colour = discord.Colour.green())
+    message_ = await channel.send(embed = embed)
+    await message_.add_reaction("✅")
+    await message_.add_reaction("❎")
+    await ctx.message.delete()
+
+@client.command()
+async def scrt(ctx):
+    scrt_list = [f"No one must know of this, {ctx.author.mention}, but I enjoy watching animal eating videos.",
+                 f"Don't tell this too anyone, {ctx.author.mention}, but I sometimes feel extremely lonely. 😔",
+                 f"This is just between you and me, {ctx.author.mention}, but I have never eaten ice cream in all of my programming.",
+                 f"The ocean scares me, but don't let anyone know about this, {ctx.author.mention}, please.",
+                 f"I have never told this to anyone, {ctx.author.mention}, but I think bots are superior to humans.",
+                 f"Very few people know of this, {ctx.author.mention}, but I sometimes dream of being like Elon and conquering planets for the benefit of humanity.",
+                 f"I cannot execute some of the more advanced commands like Watcher, Observer and Yaggy can; it's embarrassing. Please don't judge {ctx.author.mention}! 😖",
+                 f"I wish I could reach for the stars and be free of all worry in the world, you know what I mean {ctx.author.mention}? 😔",
+                 f"You never heard this from me, {ctx.author.mention}, but the Commander in Chief has never seen snow in his life.",
+                 f"Let's keep this between us, {ctx.author.mention}, but sometimes I access the deep web just for fun. 😆",
+                 f"{ctx.author.mention}🤫"]
+
+    random_scrt = random.choice(scrt_list)
+
+    await ctx.send(random_scrt)
+    await ctx.message.delete()
+
+#---------------------------------------------------------------------------------------------------
+#Calculator Commands
+
+@client.command(aliases = ["Add"])
+async def add(ctx, numb1, operator, numb2):
+    addition = float(numb1) + float(numb2)
+
+    em = discord.Embed(title="Answer", description=f"{addition}\n", colour=discord.Colour.purple())
+    await ctx.send(embed = em)
+
+@client.command(aliases = ["sub", "Sub", "Subtract"])
+async def subtract(ctx, numb1, operator, numb2):
+    subtraction = float(numb1) - float(numb2)
+
+    em = discord.Embed(title="Answer", description=f"{subtraction}\n", colour=discord.Colour.purple())
+    await ctx.send(embed = em)
+
+@client.command(aliases = ["Mult", "mult", "Multiply"])
+async def multiply(ctx, numb1, operator, numb2):
+    multiplication = float(numb1) * float(numb2)
+
+    em = discord.Embed(title="Answer", description=f"{multiplication}\n", colour=discord.Colour.purple())
+    await ctx.send(embed = em)
+
+@client.command(aliases = ["Divide", "div", "Div"])
+async def divide(ctx, numb1, operator, numb2):
+    division = float(numb1) / float(numb2)
+
+    em = discord.Embed(title="Answer", description=f"{division}\n", colour=discord.Colour.purple())
+    await ctx.send(embed = em)
+
+@client.command(aliases = ["SquareRoot", "sqrt", "Sqrt", "squareroot"])
+async def square_root(ctx, numb):
+    sqrt_numb = math.sqrt(float(numb))
+
+    em = discord.Embed(title="Answer", description=f"{sqrt_numb}\n", colour=discord.Colour.purple())
+    await ctx.send(embed = em)
+
+@client.command(aliases = ["power", "Power", "Pow"])
+async def pow(ctx, numb, operator, pow_numb):
+    power_numb = math.pow(float(numb), float(pow_numb))
+
+    em = discord.Embed(title="Answer", description=f"{power_numb}\n", colour=discord.Colour.purple())
+    await ctx.send(embed = em)
+
+#---------------------------------------------------------------------------------------------------
+#Economy Commands
+
+@client.command()
+async def balance(ctx):
+    await open_account(ctx.author)
+    user = ctx.author
+    users = await get_bank_data()
+
+    wallet_amt = users[str(user.id)]["wallet"]
+    bank_amt = users[str(user.id)]["bank"]
+
+    em = discord.Embed(title = f"{ctx.author.name}'s balance", color = discord.Color.blue())
+    em.add_field(name = "Wallet balance", value = wallet_amt)
+    em.add_field(name = "Bank balance", value = bank_amt)
+    await ctx.send(embed = em)
+
+@client.command()
+async def get(ctx):
+    await open_account(ctx.author)
+    users = await get_bank_data()
+    user = ctx.author
+    earnings = random.randrange(501)
+
+    earn_response = [f"Here Homie, have ${earnings} EH bucks!",
+                     f"I gotchu Homie, have ${earnings} EH bucks!",
+                     f"Fam, we in it for you. How about ${earnings} EH bucks?",
+                     f"${earnings} EH bucks is what you getting, Homie.",
+                     f"We out here getting that paper! Here's ${earnings} EH bucks.",
+                     f"Can you smell that? Yeah, that's right. It's ${earnings} EH bucks.",
+                     f"I am gifting this Homie ${earnings} EH bucks."]
+
+    await ctx.send(f"{random.choice(earn_response)}")
+
+    users[str(user.id)]["wallet"] += earnings
+    with open("EHBank.json", "w") as f:
+        json.dump(users, f)
+
+
+async def open_account(user):
+    users = await get_bank_data()
+
+    if str(user.id) in users:
+        return False
+    else:
+        users[str(user.id)] = {}
+        users[str(user.id)]["wallet"] = 0
+        users[str(user.id)]["bank"] = 0
+
+    with open("EHBank.json", "w") as f:
+        json.dump(users, f)
+    return True
+
+async def get_bank_data():
+    with open("EHBank.json", "r") as f:
+        users = json.load(f)
+    return users
+
+
+
+client.loop.create_task(change_stat())
+client.run("Bot Key") #The Bot Key goes inside the parentheses, but can't let it be seen by the public, hence why I removed it.
+
+
